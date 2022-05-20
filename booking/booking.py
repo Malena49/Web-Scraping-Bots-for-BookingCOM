@@ -77,6 +77,10 @@ class Booking (webdriver.Chrome):
         filtre.apply_star_rate(3,4,5)
         time.sleep(2)
         filtre.apply_lowest_price_first()
+    
+    def report_result(self):
+        pass
+
 
            
     
