@@ -1,10 +1,13 @@
-from lib2to3.pgen2 import driver
-from tkinter import N
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
 import booking.constants as const
 from selenium.webdriver.common.by import By
 from booking.booking_filtre import Bookingfiltre
 import time
+from booking.BookingReport import Booking_report
+from selenium.webdriver.remote.webelement import WebElement
+
 
 class Booking (webdriver.Chrome):
     def __init__(self, teardown = False):
@@ -23,9 +26,15 @@ class Booking (webdriver.Chrome):
         self.maximize_window()
 
     def refuse_cookie (self):
-        cookie_refuse = self.find_element(by=By.ID, value="onetrust-reject-all-handler")
-        if cookie_refuse:
+        try:
+            cookie_refuse = WebDriverWait(self, 5).until(
+            EC.element_to_be_clickable(
+            (By.ID, "onetrust-reject-all-handler")
+            )
+            )
             cookie_refuse.click()
+        except:
+            print("no cookie bar")
     
     def change_currency(self, currency =None):
         currency_menu = self.find_element(
@@ -79,7 +88,24 @@ class Booking (webdriver.Chrome):
         filtre.apply_lowest_price_first()
     
     def report_result(self):
-        pass
+        time.sleep(3)
+        all_hotels = self.find_element(
+            by=By.ID, 
+            value="search_results_table"
+            ).find_elements(
+        by=By.CSS_SELECTOR, 
+        value='div[data-testid="property-card"]'
+        )
+        report = Booking_report(all_hotels)
+        report.pull_title()
+
+       
+
+  
+      #  single_hotel_array = all_hotels.find_elements(by=By.CSS_SELECTOR, value='div[data-testid="property-card"]')
+      #  report = Booking_report(all_hotels)
+       # report.pull_title()
+        
 
 
            
