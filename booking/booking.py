@@ -3,16 +3,15 @@ from tkinter import N
 from selenium import webdriver
 import booking.constants as const
 from selenium.webdriver.common.by import By
-"""
-options = webdriver.ChromeOptions()
-options.add_experimental_option('excludeSwitches', ['enable-logging'])
-driver = webdriver.Chrome(options=options)
-"""
+from booking.booking_filtre import Bookingfiltre
+import time
 
 class Booking (webdriver.Chrome):
     def __init__(self, teardown = False):
         self.teardown = teardown
-        super(Booking, self).__init__()
+        options = webdriver.ChromeOptions()
+        options.add_experimental_option('excludeSwitches', ['enable-logging']) #ignore devtools message
+        super(Booking, self).__init__(options=options)
     def __exit__(self, *args):
         if self.teardown:
             self.quit()
@@ -72,6 +71,12 @@ class Booking (webdriver.Chrome):
     def submit_search(self):
         search_button = self.find_element(by=By.CSS_SELECTOR, value='button[data-sb-id="main"]')
         search_button.click()
+
+    def applyfilter(self):
+        filtre = Bookingfiltre(driver=self)
+        filtre.apply_star_rate(3,4,5)
+        time.sleep(2)
+        filtre.apply_lowest_price_first()
 
            
     
