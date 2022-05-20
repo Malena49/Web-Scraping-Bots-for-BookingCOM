@@ -6,7 +6,9 @@ class Bookingfiltre:
         self.driver = driver
     def apply_star_rate(self, *star_values):
         for star_value in star_values:
-            start_element = self.driver.find_element(by=By.CSS_SELECTOR, value=f'div[data-filters-item="class:class={star_value}"]')
+            start_element = self.driver.find_element(
+                by=By.CSS_SELECTOR, 
+                value=f'div[data-filters-item="class:class={star_value}"]')
             start_element.click()
             
 

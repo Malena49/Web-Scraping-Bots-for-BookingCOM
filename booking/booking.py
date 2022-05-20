@@ -35,7 +35,17 @@ class Booking (webdriver.Chrome):
             cookie_refuse.click()
         except:
             print("no cookie bar")
-    
+    def change_language (self):
+        language_menu = self.find_element(
+            by=By.CSS_SELECTOR,
+            value='button[data-modal-id="language-selection"]'
+        )
+        language_menu.click()
+        select_language = self.find_element(
+            by=By.CSS_SELECTOR,
+            value='a[data-lang="fr"]'
+        )
+        select_language.click()
     def change_currency(self, currency =None):
         currency_menu = self.find_element(
             by=By.CSS_SELECTOR,
@@ -83,12 +93,12 @@ class Booking (webdriver.Chrome):
 
     def applyfilter(self):
         filtre = Bookingfiltre(driver=self)
-        filtre.apply_star_rate(3,4,5)
+        filtre.apply_star_rate(0)
         time.sleep(2)
         filtre.apply_lowest_price_first()
     
     def report_result(self):
-        time.sleep(3)
+        # time.sleep(3)
         all_hotels = self.find_element(
             by=By.ID, 
             value="search_results_table"
@@ -97,7 +107,7 @@ class Booking (webdriver.Chrome):
         value='div[data-testid="property-card"]'
         )
         report = Booking_report(all_hotels)
-        report.pull_title()
+        report.pull_hotels_infos()
 
        
 
