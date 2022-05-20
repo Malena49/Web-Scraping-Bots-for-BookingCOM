@@ -19,10 +19,7 @@ class Booking_report:
             # get hotel price
             hotel_price = self.hotel_boxes[i].find_element(
                 by=By.CSS_SELECTOR,
-                value= 'div[data-testid="price-and-discounted-price"]'
-            ).find_element(
-                by=By.TAG_NAME,
-                value='span'
+                value= 'div[data-testid="price-and-discounted-price"] span:last-child'
             ).get_attribute("innerHTML").strip()
             # get hotel score
             try:
@@ -34,4 +31,4 @@ class Booking_report:
                 hotel_score = "no score"
             collection.append([hotel_name,hotel_score, hotel_price])
             i+=1
-        print(collection)
+        return collection

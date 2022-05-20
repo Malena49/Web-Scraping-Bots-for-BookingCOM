@@ -1,3 +1,4 @@
+from distutils.command.check import check
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
@@ -6,7 +7,9 @@ from selenium.webdriver.common.by import By
 from booking.booking_filtre import Bookingfiltre
 import time
 from booking.BookingReport import Booking_report
-from selenium.webdriver.remote.webelement import WebElement
+from prettytable import PrettyTable
+import datetime
+
 
 
 class Booking (webdriver.Chrome):
@@ -41,10 +44,11 @@ class Booking (webdriver.Chrome):
             value='button[data-modal-id="language-selection"]'
         )
         language_menu.click()
-        select_language = self.find_element(
-            by=By.CSS_SELECTOR,
-            value='a[data-lang="fr"]'
-        )
+        select_language = WebDriverWait(self, 5).until(
+            EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, 'a[data-lang="fr"]')
+            )
+            )
         select_language.click()
     def change_currency(self, currency =None):
         currency_menu = self.find_element(
@@ -64,7 +68,14 @@ class Booking (webdriver.Chrome):
         place_field.send_keys(place)
         selected_place = self.find_element(by=By.CSS_SELECTOR, value='li[data-i="0"]')
         selected_place.click()
-    def select_when(self, check_in, check_out):
+    def select_when(self, days_earlier, stay_night):
+        today= datetime.datetime.now()
+        # check-in in how many dyas
+        check_in_date = today + datetime.timedelta(days = days_earlier) 
+        check_in = check_in_date.strftime("%Y-%m-%d")
+        # stay for how many nights
+        check_out_date = check_in_date + datetime.timedelta(stay_night)
+        check_out = check_out_date.strftime("%Y-%m-%d")
         check_in_field = self.find_element(by=By.CSS_SELECTOR, value=f'td[data-date="{check_in}"]')
         check_in_field.click()
         check_out_field = self.find_element(by=By.CSS_SELECTOR, value=f'td[data-date="{check_out}"]')
@@ -93,7 +104,7 @@ class Booking (webdriver.Chrome):
 
     def applyfilter(self):
         filtre = Bookingfiltre(driver=self)
-        filtre.apply_star_rate(0)
+        filtre.apply_star_rate(4,5)
         time.sleep(2)
         filtre.apply_lowest_price_first()
     
@@ -107,7 +118,12 @@ class Booking (webdriver.Chrome):
         value='div[data-testid="property-card"]'
         )
         report = Booking_report(all_hotels)
-        report.pull_hotels_infos()
+        table = PrettyTable(
+            field_names=["Hotel Name", "Hotel score", "Hotel price"]
+        )
+        table.add_rows(report.pull_hotels_infos())
+        print(table)
+        
 
        
 
