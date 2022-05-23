@@ -13,7 +13,7 @@ Automatisation Web Selenium avec Python
 
 ### Installation
 
-- Executer la commande ``git clone https://github.com/Malena49/Browser-Automation-Selenium.git``
+- Executer la commande ``git clone https://github.com/Malena49/Web-Scraping-Bots-for-BookingCOM.git``
 - Executer la commande ``pip install selenium``
 - Executer la commande ``pip install prettytable``
 
