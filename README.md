@@ -3,7 +3,7 @@
 ## Présentation
 
 Un bot de grattage Web pour extraire des données hôtelières sur Booking.com <br>
-Automatisation Web Selenium avec Python
+Automatisation Web Selenium avec Python 
 
 ### Pré-requis
 
